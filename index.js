@@ -26,10 +26,22 @@ io.on('connection', function (socket) {
             y: 300
         };
     });
+    socket.on('movement', function (data) {
+        let player = players[socket.id] || {};
+        if (data.left) {
+            player.x -= 5;
+        }
+        if (data.up) {
+            player.y -= 5;
+        }
+        if (data.right) {
+            player.x += 5;
+        }
+        if (data.down) {
+            player.y += 5;
+        }
+    });
 });
-
-io.on('connection', function (socket) {
-})
 
 setInterval(function () {
     io.sockets.emit('state', players);
