@@ -1,17 +1,18 @@
 import {Injectable} from "@nestjs/common";
 import {UserService} from "../user/user.service";
+import {Payload} from "./payload";
+import {sign} from "jsonwebtoken";
 
 @Injectable()
 export class AuthService {
     constructor(private readonly userService: UserService) {
     }
 
-    async validateUser(username, pass): Promise<any> {
-        const user = await this.userService.findOne(username)
-        if (user && user.password === pass) {
-            const {password, ...result} = user
-            return result
-        }
-        return null
+    async signPayload(payload: Payload) {
+        return sign(payload, 'secret', {expiresIn: '1d'}) // 1 день
+    }
+
+    async validateUser(payload: Payload) {
+        return await this.userService.findByPayload(payload)
     }
 }
