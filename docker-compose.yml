@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  server:
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    dockerfile: ./server/Dockerfile
+    build: .
+    ports:
+      - "8080:3000"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  mongodb:
+    image: 'mongo'
+    container_name: 'uno-mongodb'
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - 27017:27017
+
+volumes:
+  mongodata:
