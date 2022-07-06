@@ -5,6 +5,7 @@ import {Model} from "mongoose";
 import {User} from "./user";
 import {RegisterDto} from "./register.dto";
 import {LoginDto} from "../auth/login.dto";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -33,7 +34,7 @@ export class UserService {
         if (!user) {
             throw new HttpException('user does not exists', HttpStatus.BAD_REQUEST)
         }
-        if (password === user.password) {
+        if (await bcrypt.compare(password, user.password)) {
             return this.sanitizeUser(user)
         } else {
             throw new HttpException('invalid credential', HttpStatus.BAD_REQUEST)
