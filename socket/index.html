@@ -79,6 +79,13 @@
         }
       });
 
+socket.on('connect user', function () {
+        let item = document.createElement("li");
+        item.textContent = 'user connect';
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+
       socket.on("chat message", function (msg) {
         let item = document.createElement("li");
         item.textContent = msg;
